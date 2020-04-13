@@ -1,0 +1,9 @@
+[Desktop Entry]
+Exec=argentumage
+Icon=${SNAP}/modules/citadel/argentum-age.png
+Name=argentumage
+Terminal=false
+Categories=Game;CardGame;
+Type=Application
+Comment=An OpenSource Collectible Card Game
+Keywords=argenum-age;

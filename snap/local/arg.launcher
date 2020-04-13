@@ -1,0 +1,3 @@
+#!/bin/bash
+exec cd $SNAP
+exec "$SNAP/./anura" "--module=citadel""$SNAP/./anura" "--module=citadel" "$@"
