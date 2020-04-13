@@ -4,6 +4,8 @@
 # Installation
 sudo snap install argentumage
 
+(snap is currently set to private so installation is impossible)
+
 # About
 
 An unofficial snap Version of Argentum Age.
