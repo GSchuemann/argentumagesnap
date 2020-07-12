@@ -4,7 +4,6 @@
 # Installation
 sudo snap install argentumage
 
-(snap is currently set to private so installation is impossible)
 
 # About
 
