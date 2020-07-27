@@ -20,6 +20,7 @@ apps:
       - pulseaudio
       - network
       - network-bind
+      - home
      slots:
       - mpris
      environment: #needed librarys for the game to start
