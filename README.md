@@ -1,5 +1,5 @@
 # argentumagesnap
-[![Snap Status](https://build.snapcraft.io/badge/GeorgScheumann/argentumagesnap.svg)](https://build.snapcraft.io/user/GeorgScheumann/argentumagesnap)
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/argentumage)
 
 # Installation
 sudo snap install argentumage
