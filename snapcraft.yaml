@@ -5,6 +5,8 @@ summary: An OpenSource Collectible Card Game # 79 char long summary
 description: An OpenSource Collectible Card Game
 grade: stable # must be stable to release into candidate/stable channels
 confinement: strict # use strict once you have the right plugs and slots
+architectures:
+  - build-on: amd64
 apps:
   argentumage:
      command: arg.launcher
