@@ -2,9 +2,11 @@ name: argentumage # you probably want to snapcraft register <name>
 base: core18 # the base snap is the execution environment for this snap
 version: '1.0.684' # just for humans, typically 1.2+git or 1.3.2
 summary: An OpenSource Collectible Card Game # 79 char long summary
-description: Hi
+description: An OpenSource Collectible Card Game
 grade: stable # must be stable to release into candidate/stable channels
 confinement: strict # use strict once you have the right plugs and slots
+architectures:
+  - build-on: amd64
 apps:
   argentumage:
      command: arg.launcher
@@ -19,6 +21,7 @@ apps:
       - pulseaudio
       - network
       - network-bind
+      - home
      slots:
       - mpris
      environment: #needed librarys for the game to start
@@ -26,6 +29,14 @@ apps:
       #needed to find swrast
       LIBGL_DRIVERS_PATH: "$LIBGL_DRIVERS_PATH:$SNAP/usr/lib/x86_64-linux-gnu/dri/"
 parts:
+  snapcraft-preload:
+    source: https://github.com/sergiusens/snapcraft-preload.git
+    plugin: cmake
+    build-packages:
+      - gcc-multilib
+      - g++-multilib
+    stage-packages:
+      - lib32stdc++6
 ##################### launcher Script, to avoid anura using a path with //
   launcher:
    source: launcher/
@@ -36,24 +47,15 @@ parts:
     source: https://github.com/davewx7/citadel.git
     source-type: git
     override-prime: |
-     mkdir /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/data /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/docs /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/images /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/music /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/sounds /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/tools /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/CONTRIBUTING /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/LICENSE /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/aa-icon.ico /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/master-config.cfg /root/prime/modules/citadel/
-     mv /root/parts/argentumage/src/module.cfg /root/prime/modules/citadel/
+     mkdir $SNAPCRAFT_PRIME/modules/citadel/
+     cd $SNAPCRAFT_PART_BUILD/
+     cd ..
+     mv src/data src/docs src/images src/music src/sounds src/tools src/CONTRIBUTING src/LICENSE src/aa-icon.ico src/master-config.cfg src/module.cfg $SNAPCRAFT_PRIME/modules/citadel/
   argentumicon:
    plugin: nil
    override-prime: | 
-     cd /root/prime/modules/citadel
+     cd $SNAPCRAFT_PRIME/modules/citadel/
      convert aa-icon.ico argentum-age.png
-     xdg-icon-resource install --novendor --size 64 argentum-age.png argentumage
 #################### anura engine
   anura-patch:
     plugin: dump
@@ -64,8 +66,16 @@ parts:
     source-type: git
     override-pull: |
        snapcraftctl pull
-       patch -p1 < /root/project/patch/anura-9999-server-log-locations.patch
-    artifacts: [INSTALL, MacOS, Makefile-safe, Makefile.ac100, Makefile.mingw, MinGW-build-instructions.txt, SConstruct, anura, compile-objects.cfg, eris_unit_tests.sh, images, lua_unit_tests.sh, modules, pull-v, restart-citadel.sh, steam_appid.txt, utils, LICENSE, Makefile, Makefile-win, Makefile.harmattan, Makefile.pandora, README.md, android, build, data, external, imgui, music, quickmake.sh, src, master-config.cfg, update, vs2013]
+       patch -p1 < $SNAPCRAFT_PROJECT_DIR/patch/anura-9999-server-log-locations.patch
+    override-build: |
+       dd if=/dev/zero of=/swapfile bs=64M count=64
+       mkswap /swapfile
+       swapon /swapfile	
+       git checkout 2bbb5cbd55d52a343a8a4981efd09472dbe3f69b #compile on the newest release fails
+       snapcraftctl build
+       swapoff /swapfile
+       rm /swapfile
+    artifacts: [INSTALL, Makefile-safe, Makefile.ac100, Makefile.mingw, MinGW-build-instructions.txt, SConstruct, anura, compile-objects.cfg, eris_unit_tests.sh, images, lua_unit_tests.sh, modules, pull-v, restart-citadel.sh, utils, LICENSE, Makefile, Makefile.harmattan, Makefile.pandora, build, data, external, imgui, music, quickmake.sh, src, update, README.md]
     build-packages:
     - g++
     - graphicsmagick-imagemagick-compat
@@ -130,4 +140,4 @@ parts:
     - libxext6
     - libpulse-dev
     - mesa-utils
-    - libgl1-mesa-glx   
+    - libgl1-mesa-glx 
