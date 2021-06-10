@@ -1,0 +1,6 @@
+#!/bin/bash
+# Workaround in snapd for proprietary nVidia drivers mounts the drivers in
+# /var/lib/snapd/lib/gl that needs to be in LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/var/lib/snapd/lib/gl:$LD_LIBRARY_PATH
+cd $SNAP # the cd is needed as a workaround, since the programm doens't start with out it.
+exec "bin/snapcraft-preload" "./anura" "--module=citadel" "--tbs_use_shared_mem=false" "--tbs_server_semaphore=1snap.argentumage" "$@"
