@@ -71,7 +71,6 @@ parts:
        dd if=/dev/zero of=/swapfile bs=64M count=64
        mkswap /swapfile
        swapon /swapfile	
-       git checkout 2bbb5cbd55d52a343a8a4981efd09472dbe3f69b #compile on the newest release fails
        snapcraftctl build
        swapoff /swapfile
        rm /swapfile
@@ -140,6 +139,4 @@ parts:
     - libxext6
     - libpulse-dev
     - mesa-utils
-    - libgl1-mesa-glx 
-
-
+    - libgl1-mesa-glx
