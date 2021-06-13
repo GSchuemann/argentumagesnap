@@ -70,7 +70,8 @@ parts:
     override-build: |
        dd if=/dev/zero of=/swapfile bs=64M count=64
        mkswap /swapfile
-       swapon /swapfile	
+       swapon /swapfile
+       git checkout 2bbb5cbd55d52a343a8a4981efd09472dbe3f69b #running citadel on the newest release fails
        snapcraftctl build
        swapoff /swapfile
        rm /swapfile
