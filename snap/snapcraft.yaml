@@ -41,6 +41,9 @@ parts:
   launcher:
    source: launcher/
    plugin: dump
+   override-prime: |
+    chmod +x $SNAPCRAFT_PRIME/arg.launcher
+   
 ##################### citadel mod
   argentumage:
     plugin: nil
